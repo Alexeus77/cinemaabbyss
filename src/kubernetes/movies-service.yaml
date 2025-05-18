@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: movies-service
-        image: ghcr.io/db-exp/cinemaabysstest/movies-service:latest
+        image: ghcr.io/alexeus77/cinemaabbyss/movies-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
@@ -39,10 +39,10 @@ spec:
         resources:
           limits:
             cpu: "300m"
-            memory: "256Mi"
+            memory: "64Mi"
           requests:
             cpu: "100m"
-            memory: "128Mi"
+            memory: "32Mi"
         readinessProbe:
           httpGet:
             path: /api/movies/health
