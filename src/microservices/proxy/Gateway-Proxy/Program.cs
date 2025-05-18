@@ -72,6 +72,7 @@ app.Use(async (context, next) =>
             }
 
             context.Response.ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream";
+            context.Response.Headers.Remove("transfer-encoding");
             await response.Content.CopyToAsync(context.Response.Body);
         }
         catch (Exception ex)
