@@ -267,11 +267,11 @@ cat .docker/config.json | base64
   ```bash
    npm run test:kubernetes
   ```
-  Часть тестов с health-чек упадет, но создание событий отработает.
-  Откройте логи event-service и сделайте скриншот обработки событий
+  
+  Откройте логи event-service и сделайте [скриншот](./Events-service-log-screenshot.jpg) обработки событий
 
 #### Шаг 3
-Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
+Добавьте сюда [скриншота](./Movies-screenshot.jpg) вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
 
 # Задание 4
@@ -285,7 +285,7 @@ cat .docker/config.json | base64
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/alexeus77/cinemaabbyss/proxy-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -295,14 +295,14 @@ proxyService:
       memory: 256Mi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 64Mi
   service:
     port: 80
     targetPort: 8000
     type: ClusterIP
 ```
 
-- Вместо ghcr.io/db-exp/cinemaabysstest/proxy-service напишите свой путь до образа для всех сервисов
+- Вместо ghcr.io/alexeus77/cinemaabbyss/proxy-service напишите свой путь до образа для всех сервисов
 - для imagePullSecret проставьте свое значение (скопируйте из конфигурации kubernetes)
   ```yaml
   imagePullSecrets:
