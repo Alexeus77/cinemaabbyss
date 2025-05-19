@@ -1,0 +1,52 @@
+﻿@startuml
+!include ./C4.includes/C4_Container.puml
+!include ./C4.includes/C4_Component.puml
+
+title Кинобездна - C4 Контейнерная диаграмма
+
+System_Boundary(system, "Cinema Abyss", "Платформа для просмотра фильмов") {
+
+  Container_Boundary(users, "Users", "Управление пользователями, аутентификация, авторизация") {
+    Container(users_api, "Users API", "C#")
+    ContainerDb(users_db, "Users Database", "PostgreSQL", "Хранение информации о пользователях")
+  }
+
+  Container_Boundary(subscriptions, "Subscriptions", "Управление подписками пользователей") {
+    Container(subscriptions_api, "Subscriptions API", "C#")
+    ContainerDb(subscriptions_db, "БД подписок", "Postgres", "Хранение информации о подписках")
+  }
+
+  Container_Boundary(payments, "Payments", "Обработка платежей") {
+    Container(payments_api, "Payments API", "C#")
+    ContainerDb(payments_db, "БД платежей", "Postgres", "Хранение информации о платежах и скидках")
+  }
+
+  Container_Boundary(movies, "Movies API", "Каталог фильмов, информация о фильмах") {
+    Container(movies_api, "Movies API", "C#")
+    ContainerDb(movies_db, "БД фильмов", "Postgres", "Хранение информации о фильмах")
+  }
+
+  Container(kafka_broker, "Kafka Broker", "Message Broker", "Асинхронное взаимодействие между сервисами")
+
+  Container(external_recommendation, "Recommendation Service", "External System", "Внешний сервис рекомендаций")
+}
+
+Rel(users_api, users_db, "Использует", "ORM")
+Rel(subscriptions_api, subscriptions_db, "Использует", "ORM")
+Rel(payments_api, payments_db, "Использует", "ORM")
+Rel(movies_api, movies_db, "Использует", "ORM")
+
+Rel(users_api, kafka_broker, "Публикует", "События (добавление/удаление)")
+Rel(payments_api, kafka_broker, "Публикует", "События (оплата)")
+
+Rel(subscriptions_api, kafka_broker, "Подписывается на", "События (оплата подписок)")
+Rel(subscriptions_api, kafka_broker, "Подписывается на", "События (пользователи)")
+Rel(movies_api, kafka_broker, "Подписывается на", "События (пользователи)")
+Rel(movies_api, kafka_broker, "Подписывается на", "Рекомендации по фильмам")
+Rel(external_recommendation, kafka_broker, "Публикует", "Рекомендации по фильмам")
+
+Rel(users_api, subscriptions_api, "Запрашивает", "Список подписок (REST)")
+Rel(movies_api, subscriptions_api, "Запрашивает", "Список подписок (REST)")
+Rel(subscriptions_api, payments_api, "Перенаправляет на", "Оплата подписки (HTTP Redirect)")
+
+@enduml

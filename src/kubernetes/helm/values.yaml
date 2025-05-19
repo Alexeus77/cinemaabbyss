@@ -5,7 +5,8 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  # {"auths":{"ghcr.io":{"auth":"YWxleGV1czc3OmdocF9tNkVQdm1SYTBWeWlsVWlxN3phTEhucHlrWXh4cTgxRnNmbXU="}}}
+  dockerconfigjson: eyJhdXRocyI6eyJnaGNyLmlvIjp7ImF1dGgiOiJZV3hsZUdWMWN6YzNPbWRvY0Y5dE5rVlFkbTFTWVRCV2VXbHNWV2x4TjNwaFRFaHVjSGxyV1hoNGNUZ3hSbk5tYlhVPSJ9fX0=
 # Database configuration
 database:
   host: postgres
@@ -33,7 +34,7 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/alexeus77/cinemaabbyss/monolith
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -53,7 +54,7 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/alexeus77/cinemaabbyss/proxy-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -65,7 +66,7 @@ proxyService:
       cpu: 100m
       memory: 128Mi
   service:
-    port: 80
+    port: 8000
     targetPort: 8000
     type: ClusterIP
 
@@ -73,7 +74,7 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/alexeus77/cinemaabbyss/movies-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -93,7 +94,7 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/alexeus77/cinemaabbyss/events-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -172,7 +173,7 @@ ingress:
         - path: /
           pathType: Prefix
           service: proxy-service
-          port: 80
+          port: 8000
         - path: /api/events
           pathType: Prefix
           service: events-service
